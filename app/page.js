@@ -1,4 +1,4 @@
-import InputComponent from "@/components/common/Navbar";
+import InputComponent from "@/components/InputComponent";
 import Image from "next/image";
 
 export default function Home() {
