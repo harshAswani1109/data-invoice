@@ -1,4 +1,3 @@
-// pages/api/uploadPdf.js
 import formidable from "formidable";
 import fs from "fs";
 import fetch from "node-fetch";
@@ -24,24 +23,20 @@ export default async function handler(req, res) {
 
     const pdfFiles = Object.values(files);
 
-    // Check if any PDF files were received
     if (pdfFiles.length === 0) {
       return res.status(400).json({ message: "No PDF files received" });
     }
 
     try {
-      // Create a FormData object to append files
       const formData = new FormData();
 
-      // Append each PDF file to the FormData
       pdfFiles.forEach((file, index) => {
         formData.append(`pdf_${index}`, fs.createReadStream(file.path), {
           filename: file.name,
         });
       });
 
-      // Forward FormData to Python backend
-      const pythonBackendEndpoint = "YOUR_PYTHON_BACKEND_ENDPOINT";
+      const pythonBackendEndpoint = "http://127.0.0.1:5000/upload";
       const pythonResponse = await fetch(pythonBackendEndpoint, {
         method: "POST",
         body: formData,
@@ -51,7 +46,6 @@ export default async function handler(req, res) {
       });
 
       if (pythonResponse.ok) {
-        // Successful response from Python backend
         return res.status(200).json({ message: "PDFs submitted successfully" });
       } else {
         console.error("Error from Python backend:", pythonResponse.statusText);

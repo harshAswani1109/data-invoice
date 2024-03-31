@@ -18,55 +18,80 @@ export default function InputComponent() {
   };
 
   const handleCancel = () => {
-    // Implement cancel logic if needed
-    // For now, just clear the uploaded files
     setPdfFiles([]);
   };
 
-  const handleSubmit = async () => {
+  const uploadFile = async (file) => {
     try {
-      // Create a FormData object to append files
       const formData = new FormData();
-      pdfFiles.forEach((file, index) => {
-        formData.append(`pdf_${index}`, file);
-      });
+      formData.append(`file`, file);
 
-      // Make a fetch request to your Next.js backend API endpoint
-      const response = await fetch("/api/uploadPdf", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://api.man-fashion.saranshsinha.me/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
-      // Check if the response from the backend is successful
       if (response.ok) {
         console.log("PDFs submitted successfully!");
-        // Return true to indicate
+        const data = await response.json();
+        await getDetails(data.url);
+        // router.push({
+        //   pathname: "/result/[slug]",
+        //   query: { slug: "success" },
+        // });
 
-        router.push({
-          pathname: "/result/[slug]",
-          query: { slug: "success" },
-        });
-
-        return true;
+        // return true;
       } else {
         console.error("Error submitting PDFs:", response.statusText);
-        // Return false to indicate failure
 
-        router.push({
-          pathname: "/result/[slug]",
-          query: { slug: "error" },
-        });
+        // router.push({
+        //   pathname: "/result/[slug]",
+        //   query: { slug: "error" },
+        // });
 
-        return false;
+        // return false;
       }
     } catch (error) {
       console.error("Error:", error);
-      // Return false for any unexpected errors
-      return false;
+
+      // return false;
     }
   };
 
-  // Function to render PDF file names and icons with delete button
+  const getDetails = async (url) => {
+    try {
+      const response = await fetch(
+        "https://api.man-fashion.saranshsinha.me/get-details",
+        {
+          method: "POST",
+          body: JSON.stringify({ url }), // Use the URL from the first API response as the body
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("Details retrieved successfully!");
+        const data = await response.json();
+        console.log("Details data:", data);
+      } else {
+        console.error("Error retrieving details:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    for (const file of pdfFiles) {
+      await uploadFile(file);
+    }
+  };
+
   const renderPdfFiles = () => {
     return pdfFiles.map((file, index) => (
       <div
@@ -95,7 +120,6 @@ export default function InputComponent() {
   return (
     <section className="flex flex-row justify-between items-start w-full ">
       <div className="flex flex-col justify-center items-start gap-4 w-2/3">
-        {/* Display all selected PDF file names with icons within glass morphism boxes */}
         {pdfFiles.length > 0 && renderPdfFiles()}
       </div>
       <div className="flex items-center justify-center w-1/3">
