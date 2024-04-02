@@ -27,29 +27,6 @@ const sampleData = {
       pincode: "789012",
     },
   ],
-  "02": [
-    {
-      _id: "ObjectId('6093a2758d26a81471234256')",
-      street: "123 Main St",
-      city: "Cityville",
-      state: "ST",
-      pincode: "123456",
-    },
-    {
-      _id: "ObjectId('6093a2758d26a81471234257')",
-      street: "125 Main St",
-      city: "Cityville",
-      state: "ST",
-      pincode: "123456",
-    },
-    {
-      _id: "ObjectId('6093a2758d26a81471234257')",
-      street: "125 Main St",
-      city: "Cityville",
-      state: "ST",
-      pincode: "123456",
-    },
-  ],
 };
 
 export default function SimilarAddressesPage() {
