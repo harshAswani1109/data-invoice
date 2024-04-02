@@ -1,5 +1,6 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const ResultPage = () => {
   const router = useRouter();
@@ -7,7 +8,7 @@ const ResultPage = () => {
 
   useEffect(() => {
     // Assume you pass the submission result through query parameters
-    const { slug } = router.query;
+    const slug = "success";
 
     if (slug === "success") {
       setSubmissionResult({

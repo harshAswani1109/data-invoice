@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { BsFiletypePdf, BsTrash } from "react-icons/bs";
 
 export default function InputComponent() {
+  const apiV1 = process.env.ENDPOINT_URL;
   const [pdfFiles, setPdfFiles] = useState([]);
 
   const handleFileChange = (event) => {
@@ -26,33 +27,17 @@ export default function InputComponent() {
       const formData = new FormData();
       formData.append(`file`, file);
 
-      const response = await fetch(
-        "https://api.man-fashion.saranshsinha.me/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${apiV1}/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         console.log("PDFs submitted successfully!");
         const data = await response.json();
         await getDetails(data.url);
-        // router.push({
-        //   pathname: "/result/[slug]",
-        //   query: { slug: "success" },
-        // });
-
-        // return true;
       } else {
         console.error("Error submitting PDFs:", response.statusText);
-
-        // router.push({
-        //   pathname: "/result/[slug]",
-        //   query: { slug: "error" },
-        // });
-
-        // return false;
       }
     } catch (error) {
       console.error("Error:", error);
@@ -63,16 +48,13 @@ export default function InputComponent() {
 
   const getDetails = async (url) => {
     try {
-      const response = await fetch(
-        "https://api.man-fashion.saranshsinha.me/get-details",
-        {
-          method: "POST",
-          body: JSON.stringify({ url }), // Use the URL from the first API response as the body
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${apiV1}/get-details`, {
+        method: "POST",
+        body: JSON.stringify({ url }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
         console.log("Details retrieved successfully!");
@@ -96,14 +78,14 @@ export default function InputComponent() {
     return pdfFiles.map((file, index) => (
       <div
         key={index}
-        className="border-4 p-4 mb-4 flex items-center justify-between rounded-lg"
+        className="border-4 p-4 flex items-center justify-between rounded-lg w-full gap-2 "
       >
         <div className="flex flex-row items-center gap-4">
           <BsFiletypePdf
             size={40}
             className="text-gray-600 dark:text-gray-400"
           />
-          <span className="text-gray-800 dark:text-gray-200 text-lg font-semibold">
+          <span className="text-gray-800 dark:text-gray-200 text-xs sm:text-sm lg:text-lg font-semibold">
             {file.name}
           </span>
         </div>
@@ -118,14 +100,14 @@ export default function InputComponent() {
   };
 
   return (
-    <section className="flex flex-row justify-between items-start w-full ">
-      <div className="flex flex-col justify-center items-start gap-4 w-2/3">
+    <section className="flex flex-col-reverse gap-y-10 md:flex-row justify-between items-start w-full ">
+      <div className="flex flex-col justify-center items-start gap-4 w-full md:w-1/2">
         {pdfFiles.length > 0 && renderPdfFiles()}
       </div>
-      <div className="flex items-center justify-center w-1/3">
+      <div className="flex items-center justify-center w-full md:w-1/2 flex-col">
         <label
           htmlFor="dropzone-file"
-          className="w-80 h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 flex flex-col items-center justify-center"
+          className="w-60 sm:w-80 h-60 sm:h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 flex flex-col items-center justify-center"
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <BsFiletypePdf
