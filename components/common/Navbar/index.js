@@ -12,6 +12,18 @@ export default function Navbar() {
           >
             Man Fashion
           </Link>
+          <Link
+            className="flex-none text-xl font-semibold dark:text-white"
+            href="/similarPincode"
+          >
+            similarPincode
+          </Link>
+          <Link
+            className="flex-none text-xl font-semibold dark:text-white"
+            href="/similarAddress"
+          >
+            SimilarAddress
+          </Link>
           <div className="">
             <button
               type="button"

@@ -1,59 +1,36 @@
 "use client";
+import React from "react";
 import { useEffect, useState } from "react";
-
-const sampleData = {
-  "00": [
-    {
-      _id: "ObjectId('6093a2758d26a81471234256')",
-      street: "123 Main St",
-      city: "Cityville",
-      state: "ST",
-      pincode: "123456",
-    },
-    {
-      _id: "ObjectId('6093a2758d26a81471234257')",
-      street: "125 Main St",
-      city: "Cityville",
-      state: "ST",
-      pincode: "123456",
-    },
-  ],
-  "01": [
-    {
-      _id: "ObjectId('6093a2758d26a81471234258')",
-      street: "789 Oak St",
-      city: "Villagetown",
-      state: "ST",
-      pincode: "789012",
-    },
-  ],
-};
+import axios from "axios";
 
 export default function SimilarAddressesPage() {
-  const apiV1 = process.env.ENDPOINT_URL;
-  const [addresses, setAddresses] = useState(sampleData);
+  const apiV1 = process.env.NEXT_PUBLIC_ENDPOINT_URL;
+  const [addresses, setAddresses] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulating API fetch with sample data
-    // Replace this with actual API call using Axios or Fetch
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    // `${apiV1}/get-similar-addresses`
-    //     );
-    //     setAddresses(response.data);
-    //   } catch (error) {
-    //     setError("Error fetching data from the server.");
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
+    const fetchData = async () => {
+      try {
+        console.log(`Fetching data from ${apiV1}/get-similar-addresses`); // Log the URL
+        const response = await axios.get(`${apiV1}/get-similar-addresses`);
+        console.log("Response data:", response.data); // Log the response data
 
-    // fetchData();
+        // Parse the JSON strings in the response data
+        const parsedData = {};
+        for (const key in response.data) {
+          parsedData[key] = response.data[key].map(JSON.parse);
+        }
 
-    // For now, set sample data directly
-    setAddresses(sampleData);
-  }, []);
+        setAddresses(parsedData);
+      } catch (error) {
+        setError("Error fetching data from the server.");
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [apiV1]);
+
   const getCounts = () => {
     const counts = {};
     for (const key in addresses) {
@@ -62,65 +39,75 @@ export default function SimilarAddressesPage() {
     return counts;
   };
 
-  // Sort the addresses based on their counts
   const sortedAddresses = Object.entries(getCounts()).sort(
     ([, countA], [, countB]) => countB - countA
   );
 
   return (
-    <div className="py-24 px-6 lg:px-24">
-      {error && <p>Error: {error}</p>}
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Count
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Street
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              City
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              State
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Pincode
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedAddresses.map(([group, count]) => (
-            <>
-              {addresses[group].map((address, index) => (
-                <tr key={`${address._id}-${index}`} className="border-2">
-                  {index === 0 && (
-                    <td
-                      rowSpan={addresses[group].length}
-                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r-2"
-                    >
-                      {count}
+    <div className="py-8 px-4 md:px-6">
+      {error && <p className="text-red-500">{error}</p>}
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">
+        Addresses
+      </h1>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Count
+              </th>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Street
+              </th>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                City
+              </th>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                State
+              </th>
+              <th className="px-4 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Pincode
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedAddresses.map(([group, count]) => (
+              <React.Fragment key={group}>
+                {addresses[group].map((address, index) => (
+                  <tr key={`${address._id.$oid}-${index}`} className="border-2">
+                    {index === 0 && (
+                      <td
+                        rowSpan={addresses[group].length}
+                        className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500 border-r-2"
+                      >
+                        {count}
+                      </td>
+                    )}
+                    <td className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500">
+                      {address.Name}
                     </td>
-                  )}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {address.street}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {address.city}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {address.state}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {address.pincode}
-                  </td>
-                </tr>
-              ))}
-            </>
-          ))}
-        </tbody>
-      </table>
+                    <td className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500">
+                      {address.address}
+                    </td>
+                    <td className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500">
+                      {address.city}
+                    </td>
+                    <td className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500">
+                      {address.state}
+                    </td>
+                    <td className="px-4 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-500">
+                      {address.pincode}
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
