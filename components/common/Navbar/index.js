@@ -1,65 +1,61 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+// import logo from "@/public/logo.png";
+import { COMPANY_NAME, NAV_ITEMS } from "@/constants";
+import { FaBars, FaTimes } from "react-icons/fa"; // Add this import
 
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <header className="flex flex-wrap z-50 w-full bg-white text-sm py-4 dark:bg-gray-800 fixed">
-      <nav className="max-w-[85rem] w-full mx-auto px-4" aria-label="Global">
-        <div className="flex items-center justify-between">
-          <Link
-            className="flex-none text-xl font-semibold dark:text-white"
-            href="/"
-          >
-            Man Fashion
-          </Link>
-          <Link
-            className="flex-none text-xl font-semibold dark:text-white"
-            href="/similarPincode"
-          >
-            similarPincode
-          </Link>
-          <Link
-            className="flex-none text-xl font-semibold dark:text-white"
-            href="/similarAddress"
-          >
-            SimilarAddress
-          </Link>
-          <div className="">
-            <button
-              type="button"
-              className="hs-collapse-toggle p-2 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-gray-700 dark:text-white dark:hover:bg-white/10 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-            >
-              <svg
-                className="hs-collapse-open:hidden flex-shrink-0 size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="3" x2="21" y1="6" y2="6" />
-                <line x1="3" x2="21" y1="12" y2="12" />
-                <line x1="3" x2="21" y1="18" y2="18" />
-              </svg>
-            </button>
-          </div>
+    <nav className="bg-[#edf7fc] fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+      <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
+        <Link href="/user" className="flex items-center rtl:space-x-reverse">
+          {/* <img src={logo.src} className="h-10" alt={COMPANY_NAME} /> */}Man
+          Fashion
+          <span className="text-2xl font-semibold">
+            <span className="font-serif text-blue-700">{COMPANY_NAME}</span>
+          </span>
+        </Link>
+
+        <button
+          onClick={toggleMenu}
+          className="inline-flex items-center justify-center w-10 h-10 p-2 text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        <div
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } w-full md:block md:w-auto`}
+          id="navbar-sticky"
+        >
+          <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`block py-2 px-3 rounded md:p-0 ${
+                    item.isActive
+                      ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700"
+                      : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700"
+                  }`}
+                  aria-current={item.isActive ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-        {/* <div id="navbar-with-collapse" className="hidden basis-full grow sm:block">
-          <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-            <a
-              className="font-medium text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-              href="#"
-              aria-current="page"
-            >
-              Landing
-            </a>
-          </div>
-        </div> */}
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 }
