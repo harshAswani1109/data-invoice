@@ -141,7 +141,7 @@ export default function InputComponent() {
       className="w-full h-screen bg-center bg-cover"
       // style={{ backgroundImage: `url(${backgroundimage.src})` }}
     >
-      <div className="flex flex-col-reverse items-start justify-center w-full min-h-screen px-6 py-32 md:flex-row bg-white/10 backdrop-blur-sm gap-y-10 lg:px-12">
+      <div className="flex flex-col-reverse items-start justify-end md:justify-center w-full min-h-screen px-6 md:py-12 md:flex-row bg-white/10 backdrop-blur-sm gap-y-10 lg:px-12">
         <div className="flex flex-col items-start justify-center w-full gap-4 md:w-1/2 ">
           {pdfFiles.length > 0 && renderPdfFiles()}
           {showGuide && renderGuide()}
