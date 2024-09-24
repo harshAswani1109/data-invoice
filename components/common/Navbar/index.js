@@ -14,11 +14,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-[#edf7fc] fixed w-full z-20 top-0 start-0 border-b border-gray-200">
-      <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
-        <Link href="/user" className="flex items-center rtl:space-x-reverse">
-          {/* <img src={logo.src} className="h-10" alt={COMPANY_NAME} /> */}Man
-          Fashion
+    <nav className="bg-[#ffffff50] backdrop-blur-md fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+      <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 md:p-2 mx-auto">
+        <Link href="/" className="flex items-center rtl:space-x-reverse">
+          {/* <img src={logo.src} className="h-10" alt={COMPANY_NAME} /> */}
           <span className="text-2xl font-semibold">
             <span className="font-serif text-blue-700">{COMPANY_NAME}</span>
           </span>
@@ -37,7 +36,7 @@ export default function Navbar() {
           } w-full md:block md:w-auto`}
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
+          <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg  md:flex-row md:space-x-8 md:mt-0">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link

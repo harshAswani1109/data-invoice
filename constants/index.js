@@ -1,10 +1,10 @@
-export const COMPANY_NAME = "Trust Guard";
+export const COMPANY_NAME = "Man Fashion";
 
 export const NAV_ITEMS = [
-  { href: "/user", label: "Home", isActive: true },
-  { href: "/user/similarPincode", label: "Similar Pincode", isActive: false },
-  { href: "/user/similarAddress", label: "Similar Address", isActive: false },
-  { href: "/contact", label: "Contact", isActive: false },
+  { href: "/", label: "Home", isActive: true },
+  { href: "/similarPincode", label: "Similar Pincode", isActive: false },
+  { href: "/similarAddress", label: "Similar Address", isActive: false },
+  // { href: "/contact", label: "Contact", isActive: false },
 ];
 
 export const MOCK_ADDRESS_DATA = {
