@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
+// import Link from "next/link";
 import { MOCK_ADDRESS_DATA_1 } from "@/constants";
 // import background from "@/public/background.jpg";
 
@@ -21,12 +21,15 @@ export default function AddressPage() {
         for (const pincode in data) {
           try {
             const parsedAddresses = JSON.parse(data[pincode]);
-            parsedData[pincode] = parsedAddresses.filter(address => 
-              !(address.Name === "NA" && 
-                address.address === "NA" && 
-                address.city === "NA" && 
-                address.state === "NA" && 
-                address.pincode === "NA")
+            parsedData[pincode] = parsedAddresses.filter(
+              (address) =>
+                !(
+                  address.Name === "NA" &&
+                  address.address === "NA" &&
+                  address.city === "NA" &&
+                  address.state === "NA" &&
+                  address.pincode === "NA"
+                )
             );
           } catch (parseError) {
             console.error(
@@ -42,12 +45,15 @@ export default function AddressPage() {
         const parsedMockData = {};
         for (const pincode in MOCK_ADDRESS_DATA_1) {
           const parsedAddresses = JSON.parse(MOCK_ADDRESS_DATA_1[pincode]);
-          parsedMockData[pincode] = parsedAddresses.filter(address => 
-            !(address.Name === "NA" && 
-              address.address === "NA" && 
-              address.city === "NA" && 
-              address.state === "NA" && 
-              address.pincode === "NA")
+          parsedMockData[pincode] = parsedAddresses.filter(
+            (address) =>
+              !(
+                address.Name === "NA" &&
+                address.address === "NA" &&
+                address.city === "NA" &&
+                address.state === "NA" &&
+                address.pincode === "NA"
+              )
           );
         }
         setAddresses(parsedMockData);
@@ -76,7 +82,9 @@ export default function AddressPage() {
               key={pincode}
               className="p-6 transition duration-300 transform shadow-md rounded-xl hover:scale-105 backdrop-blur-md bg-[#ffffff50]"
             >
-              <h2 className="mb-4 text-xl font-bold text-[#0e1111]">{pincode}</h2>
+              <h2 className="mb-4 text-xl font-bold text-[#0e1111]">
+                {pincode}
+              </h2>
               <ul className="divide-y divide-gray-200">
                 {addressList.map((address, idx) => (
                   <li key={`${address._id.$oid}-${idx}`} className="py-4">

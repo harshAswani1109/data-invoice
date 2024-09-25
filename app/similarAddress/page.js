@@ -2,7 +2,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
+// import Link from "next/link";
 import { MOCK_ADDRESS_DATA } from "@/constants";
 // import background from "@/public/background.jpg";
 
@@ -14,9 +14,9 @@ export default function SimilarAddressesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(`Fetching data from ${apiV1}/get-similar-addresses`);
+        // console.log(`Fetching data from ${apiV1}/get-similar-addresses`);
         const response = await axios.get(`${apiV1}/get-similar-addresses`);
-        console.log("Response data:", response.data);
+        // console.log("Response data:", response.data);
 
         const parsedData = {};
         for (const key in response.data) {
@@ -104,7 +104,10 @@ export default function SimilarAddressesPage() {
                 return (
                   <React.Fragment key={group}>
                     {validAddresses.map((address, index) => (
-                      <tr key={`${address._id.$oid}-${index}`} className="transition duration-150 ease-in-out border-b border-gray-200/30 hover:bg-white/20">
+                      <tr
+                        key={`${address._id.$oid}-${index}`}
+                        className="transition duration-150 ease-in-out border-b border-gray-200/30 hover:bg-white/20"
+                      >
                         {index === 0 && (
                           <td
                             rowSpan={validAddresses.length}
