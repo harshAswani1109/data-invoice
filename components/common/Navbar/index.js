@@ -8,9 +8,27 @@ import { FaBars, FaTimes } from "react-icons/fa"; // Add this import
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // New state for popup
+  const [password, setPassword] = useState(""); // New state for password
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleDeleteClick = () => {
+    setIsPopupOpen(true); // Open the popup
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (password === "deleteAll") { // Check password
+      await fetch(`api/${password}`, { method: 'DELETE' }); // Call API
+      setIsPopupOpen(false); // Close the popup
+      setPassword(""); // Reset password
+      alert("Data Deleted"); 
+    } else {
+      alert("Incorrect password!");  // Handle incorrect password
+      setPassword("");
+    }
   };
 
   return (
@@ -54,6 +72,36 @@ export default function Navbar() {
             ))}
           </ul>
         </div>
+
+
+        
+        <button
+          onClick={handleDeleteClick} // Add delete button
+          className="ml-4 p-2 text-red-500 hover:bg-red-100 rounded"
+        >
+          Delete
+        </button>
+
+        {/* Popup for password input */}
+        {isPopupOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 h-screen z-10">
+            <div className="bg-white p-4 rounded shadow-lg">
+              <h2 className="text-lg font-semibold">Enter Password</h2>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border-black border-2 p-2 rounded w-full mb-6"
+              />
+              <button onClick={handleDeleteConfirm} className="mt-2 p-2 bg-blue-500 text-white rounded mr-6">
+                Confirm
+              </button>
+              <button onClick={() => setIsPopupOpen(false)} className="mt-2 p-2 bg-gray-300 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
